@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 // import RegisterButton from './RegisterButton'; // Ensure you have this component for styling
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
   const [error, setError] = useState('');
   const [joinedEvents, setJoinedEvents] = useState(new Set());
+  const {currentUser} = useSelector(state => state.user);
 
-  // Assuming you have a way to get the current user ID
-  const currentUserId = "userIdHere"; // Replace with actual user ID
+  // Assuming you have a way to get the current user I
 
   useEffect(() => {
     const getEvents = async () => {
@@ -20,22 +21,22 @@ const EventList = () => {
       }
     };
 
-    const fetchJoinedEvents = async () => {
-      try {
-        const { data } = await axios.get('/api/user/joinedEvents', {
-          params: { userId: currentUserId }
-        });
-        setJoinedEvents(new Set(data.map(event => event._id)));
-      } catch (err) {
-        console.error('Failed to fetch joined events', err);
-      }
-    };
+    // const fetchJoinedEvents = async () => {
+    //   try {
+    //     const { data } = await axios.get('/api/user/joinedEvents', {
+    //       params: { userId: currentUserId }
+    //     });
+    //     setJoinedEvents(new Set(data.map(event => event._id)));
+    //   } catch (err) {
+    //     console.error('Failed to fetch joined events', err);
+    //   }
+    // };
 
     getEvents();
-    fetchJoinedEvents();
+    // fetchJoinedEvents();
   }, []);
 
-  const joinEvent = async (eventId) => {
+  const registerEvent = async (eventId) => {
     try {
       await axios.post('/api/events/join', { userId: currentUserId, eventId });
       setJoinedEvents(prev => new Set(prev).add(eventId));
@@ -59,17 +60,20 @@ const EventList = () => {
               <p><span className="flex flex-col font-semibold">Created by:</span> {event.createdBy[0].username}</p>
               <div>
 
-              <p className='flex flex-col'><span className="font-semibold">Time to Live:</span> {new Date(event.date).toLocaleString()}</p>
+              <p className='flex flex-col'><span className="font-semibold">Time to Live:</span> {new Date(event.liveDate).toLocaleString()}</p>
               </div>
             </div>
             <div className="flex justify-between items-center mt-4">
               <div className={`bg-blue-600 text-white text-sm font-semibold px-4 py-2 rounded-lg ${event.liveData ? 'bg-blue-700' : 'bg-green-600'}`}>
                 {event.liveData ? 'Live Now' : 'Upcoming'}
               </div>
-                <button 
-                  onClick={() => joinEvent(event._id)}
-                  // isJoined={joinedEvents.has(event._id)}
-                >Register</button>
+              {currentUser ? (event.createdBy[0]._id === currentUser._id) ? <></> : <button
+                    onClick={() => registerEvent(event._id)}
+                    className="bg-blue-500 text-white py-2 px-4 rounded-lg mt-2"
+                  >
+                    Register
+                  </button> :  <a href='/signin'>Signin</a>}
+            
               </div>
             </div>
           </div>

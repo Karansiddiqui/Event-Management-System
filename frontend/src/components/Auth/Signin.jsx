@@ -73,10 +73,10 @@ export default function SignIn() {
         <div className="flex-1 md:mt-24 max-w-lg">
           <Link to={"/"} className="font-bold dark:text-white text-4xl">
             <span className=" text-[rgb(151,151,162)]">Open</span>
-            Post
+            Event
           </Link>
           <p className="text-sm mt-5">
-            This is a demo project. You can sign in with <strong className=" text-green-500">ADMIN</strong> email <strong className=" text-green-500">user@gmail.com</strong> and password <strong className=" text-green-500">1234 </strong> 
+            This is a demo project. You can sign in with  email <strong className=" text-green-500">karansiddiq@gmail.com</strong> and password <strong className=" text-green-500">1234 </strong> 
            or with Google
           </p>
         </div>

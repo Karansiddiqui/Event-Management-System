@@ -5,8 +5,6 @@ const { sendReminder } = require('../utils/email.js');
 const User = require('../models/User');
 
 const createEvent = async (req, res) => {
-  const token = req.cookies.access_token;
-  console.log(req.body);
   
   try {
     const event = await Event.create({
@@ -29,9 +27,12 @@ const getEvents = async (req, res) => {
     let events;
 
     // Check if userId exists in the query parameters
+    console.log("inside event", req.query.userId);
     if (req.query.userId) {
+      
       // Fetch events created by the specific user
-      events = await Event.find({ createdBy: req.query.userId });
+      events = await Event.find({ createdBy: req.query.userId }).populate("createdBy");
+      
     } else {
       // Fetch all events if no userId is provided
       events = await Event.find().populate("createdBy");
@@ -55,12 +56,24 @@ const getEventById = async (req, res) => {
 };
 
 const deleteEvent = async (req, res) => {
+
   try {
-    const event = await Event.findByIdAndDelete(req.params.id);
-    if (!event) return res.status(404).json({ message: 'Event not found' });
-    res.json({ message: 'Event deleted' });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+    const id = req.params.id;
+    console.log(id);
+    
+    if (!id) {
+      return res.status(400).json({ error: 'Event ID is required' });
+    }
+
+    const result = await Event.findByIdAndDelete(id);
+    if (!result) {
+      return res.status(404).json({ error: 'Event not found' });
+    }
+
+    res.json({ message: 'Event deleted successfully' });
+  } catch (err) {
+    console.error('Error deleting event:', err);
+    res.status(500).json({ error: 'Failed to delete event' });
   }
 };
 

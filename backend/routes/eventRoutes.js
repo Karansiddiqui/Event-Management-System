@@ -6,7 +6,7 @@ const router = express.Router();
 router.post('/createEvents', authMiddleware, createEvent);
 router.get('/', getEvents);
 router.get('/:id', getEventById);
-router.delete('/:id', authMiddleware, deleteEvent);
+router.delete('/deleteEvent/:id', authMiddleware, deleteEvent);
 router.post('/:id/rsvp', authMiddleware, rsvpEvent);
 router.post('/:id/reminder', authMiddleware, sendEventReminder);
 router.get('/:eventId/attendees', getAttendees);

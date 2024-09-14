@@ -41,15 +41,6 @@ export default function Header() {
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const urlParams = new URLSearchParams(location.search);
-    urlParams.set("searchTerm", searchTerm);
-    urlParams.set("sort", sort);
-    urlParams.set("category", category);
-    const searchQuery = urlParams.toString();
-    navigate(`/search?${searchQuery}`);
-  };
 
   return (
     <Navbar
@@ -66,25 +57,12 @@ export default function Header() {
             OPEN
           </div>
           <div className="border-slate-900 w-12 md:w-20 pl-1 border-2 rounded-r-md dark:border-white">
-            POST
+            EVENT
           </div>
         </div>
       </Link>
 
-      <form onSubmit={handleSubmit} className=" hidden sm:inline">
-        <div className="w-28 lg:w-full">
-          <input
-            type="text"
-            placeholder="Search. . ."
-            className="w-full text-gray-900 border border-gray-300 rounded-lg text-base focus:border-blue-500 dark:bg-gray-900 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-700 dark:focus:border-blue-700"
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value);
-            }}
-          />
-        </div>
-      </form>
-
+      
       <Button
         className="w-9 h-9  sm:hidden items-center"
         color="gray"
